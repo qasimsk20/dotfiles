@@ -45,7 +45,7 @@ dotfiles/
 
 ## Features
 
-- **Editor**: Neovim with LazyVim
+- **Editor**: Neovim (custom config)
 - **Shell**: Nushell + Starship prompt
 - **Terminal**: Ghostty
 - **Music**: MPD + Discord RPC
