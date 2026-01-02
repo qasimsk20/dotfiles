@@ -1,0 +1,46 @@
+# Cache directories
+**/Cache/
+**/GPUCache/
+**/Code Cache/
+**/Dawn*/
+**/Local Storage/
+**/Session Storage/
+**/Shared Dictionary/
+**/logs/
+**/profiler_data/
+**/__pycache__/
+
+# Databases
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.sqlite3*
+**/*.log
+
+# Backup files
+**/*.bak*
+**/*.backup*
+**/backup*/
+
+# IDE and editor files
+**/.vscode/
+**/.idea/
+
+# Temporary files
+**/*~
+**/*.swp
+**/*.swo
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Application specific
+.config/mutt/.mailsynclastrun
+.config/mpd/mpdstate
+.config/mpd/mpd.log
+.config/nushell/history.sqlite3*
+
+# Embedded git repos
+.config/nushell/catppuccin/
+.config/tmux/.tmux/plugins/
