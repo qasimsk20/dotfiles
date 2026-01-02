@@ -1,0 +1,69 @@
+# Dynamic theme colors
+config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+
+# Local overrides (GTK CSS, etc.)
+gtk-custom-css = ?"~/.config/ghostty/overrides.css"
+
+background-opacity = 0.80
+# custom-shader = ~/.config/ghostty/shaders/cursor_trails_custom.glsl
+font-family = Monaspace Neon NF
+font-size = 14
+font-variation = wght=500
+
+# Font Features - Ligatures and Stylistic Sets
+# ---------------------------------------------
+# Monaspace splits ligatures into stylistic sets by language
+# ss01: != and === ligatures
+font-feature = ss01
+# ss02: <= and >= ligatures
+font-feature = ss02
+# ss03: -> and ~> ligatures (arrows)
+font-feature = ss03
+# ss04: <> and </> ligatures (XML/HTML)
+font-feature = ss04
+# ss05: ligatures for ML languages
+font-feature = ss05
+# ss06: ligatures for medium-weight fonts
+font-feature = ss06
+# ss07: ligatures for Vim
+font-feature = ss07
+# ss08: ligatures for pragmatic uses
+font-feature = ss08
+# ss09: additional ligatures
+font-feature = ss09
+# liga: enables standard ligatures like //, ..., ||
+font-feature = liga
+# calt: enables contextual alternates (TEXTURE HEALING!)
+# This is the key feature that makes Monaspace special
+font-feature = calt
+
+# Window
+window-decoration = false
+window-padding-x = 14
+window-padding-y = 14
+confirm-close-surface=true
+resize-overlay = never
+gtk-toolbar-style = flat
+gtk-wide-tabs = false
+
+# Cursor styling
+cursor-style = "block"
+cursor-style-blink = false
+
+# Cursor styling + SSH session terminfo
+shell-integration-features = ssh-env
+
+# Keyboard bindings
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+keybind = super+control+shift+alt+arrow_down=resize_split:down,100
+keybind = super+control+shift+alt+arrow_up=resize_split:up,100
+keybind = super+control+shift+alt+arrow_left=resize_split:left,100
+keybind = super+control+shift+alt+arrow_right=resize_split:right,100
+keybind = shift+enter=text:\x1b\r
+
+# Grid (tmux-like keybinds)
+# config-file = ?"~/.config/ghostty/grid.conf"
+
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95

@@ -1,0 +1,415 @@
+# Elegant Nushell Configuration
+# A single, unified file optimized for performance and readability
+
+# =============================================================================
+# Environment & Path Setup
+# =============================================================================
+$env.EDITOR = "nvim"
+$env.VISUAL = "nvim"
+$env.BAT_THEME = "ansi"
+$env.MANPAGER = "batman" 
+$env.PAGER = "bat -p" 
+$env.STARSHIP_CONFIG = ($env.HOME | path join ".config" "starship.toml")
+$env.PNPM_HOME = ($env.HOME | path join ".local/share" "pnpm")
+
+$env.LS_COLORS = if (which vivid | is-not-empty) {
+    (vivid generate catppuccin-mocha)
+}
+
+$env.PATH = (
+    $env.PATH 
+    | prepend "/home/qasimsk20/.radicle/bin"
+    | prepend $env.PNPM_HOME
+    | prepend "/home/qasimsk20/.local/share/omarchy/bin"
+    | prepend "/home/qasimsk20/.local/bin"
+    | uniq
+)
+
+$env.COMMANDS_CACHE = (help commands)
+
+# =============================================================================
+# Performance-Optimized Tool Integrations
+# =============================================================================
+source ~/.cache/zoxide/init.nu
+source ~/.cache/atuin/init.nu
+source ~/.cache/starship/init.nu
+
+if ("($nu.home-path)/.cargo/env.nu" | path exists) {
+    source $"($nu.home-path)/.cargo/env.nu"
+}
+
+# =============================================================================
+# Nushell Configuration
+# =============================================================================
+$env.PROMPT_INDICATOR = {|| "" }
+$env.PROMPT_INDICATOR_VI_INSERT = {|| ": " }
+$env.PROMPT_INDICATOR_VI_NORMAL = {|| "› " }
+$env.PROMPT_MULTILINE_INDICATOR = {|| "::: " }
+
+$env.config = {
+    show_banner: false
+    edit_mode: 'vi'
+    
+    # Disable the default prompt indicators since Starship handles the prompt
+    # This removes the extra ": " or "> " that appears before the cursor
+    shell_integration: {
+        osc133: true
+        osc633: true
+        reset_application_mode: true
+    }
+    
+    ls: {
+        use_ls_colors: true
+        clickable_links: true
+    }
+    
+    table: {
+        mode: heavy
+        index_mode: always
+        show_empty: true
+        padding: { left: 1, right: 1 }
+        trim: {
+            methodology: wrapping
+            wrapping_try_keep_words: true
+            truncating_suffix: "..."
+        }
+        header_on_separator: false
+    }
+    
+    completions: {
+        algorithm: "fuzzy"
+        case_sensitive: false
+        quick: true
+        sort: "smart"
+        external: {
+            enable: true
+            max_results: 50
+            completer: null
+        }
+    }
+    
+    menus: [
+        {
+            name: completion_menu
+            only_buffer_difference: false
+            marker: "| "
+            type: {
+                layout: columnar
+                columns: 4
+                col_width: 20
+                col_padding: 2
+            }
+            style: {
+                text: cyan
+                selected_text: { fg: black bg: magenta attr: b }
+                description_text: white
+                match_text: { fg: cyan attr: b }
+                selected_match_text: { fg: black bg: magenta attr: b }
+            }
+        }
+        {
+            name: history_menu
+            only_buffer_difference: true
+            marker: " "
+            type: {
+                layout: list
+                page_size: 10
+            }
+            style: {
+                text: green
+                selected_text: { fg: black bg: magenta attr: b }
+                description_text: light_gray
+                match_text: { fg: green attr: b }
+                selected_match_text: { fg: black bg: magenta attr: b }
+            }
+        }
+    ]
+    
+    keybindings: [
+        {
+            name: completion_menu
+            modifier: none
+            keycode: tab
+            mode: [emacs vi_normal vi_insert]
+            event: {
+                until: [
+                    { send: menu name: completion_menu }
+                    { send: menunext }
+                    { edit: complete }
+                ]
+            }
+        }
+        {
+            name: history_menu
+            modifier: control
+            keycode: char_r
+            mode: [emacs vi_insert vi_normal]
+            event: { send: menu name: history_menu }
+        }
+    ]
+    
+    history: {
+        max_size: 100_000
+        sync_on_enter: true
+        file_format: "sqlite"
+    }
+}
+
+# =============================================================================
+# Custom ls with Nerd Font icons and colors
+# =============================================================================
+def get-file-style [type: string, name: string] {
+    if $type == "dir" {
+        {icon: "\u{f07b}", color: "blue"}
+    } else {
+        let ext = ($name | path parse | get extension | default "")
+        match $ext {
+            "rs" => {icon: "\u{e7a8}", color: "yellow"}
+            "py" => {icon: "\u{e73c}", color: "yellow"}
+            "js" => {icon: "\u{e74e}", color: "yellow"}
+            "ts" => {icon: "\u{e628}", color: "cyan"}
+            "jsx" | "tsx" => {icon: "\u{e7ba}", color: "cyan"}
+            "vue" => {icon: "\u{e6a0}", color: "green"}
+            "svelte" => {icon: "\u{e697}", color: "red"}
+            "html" => {icon: "\u{e736}", color: "red"}
+            "css" => {icon: "\u{e749}", color: "cyan"}
+            "scss" | "sass" => {icon: "\u{e74b}", color: "magenta"}
+            "c" => {icon: "\u{e61e}", color: "cyan"}
+            "cpp" | "cc" | "cxx" => {icon: "\u{e61d}", color: "cyan"}
+            "h" | "hpp" => {icon: "\u{e61e}", color: "magenta"}
+            "go" => {icon: "\u{e627}", color: "cyan"}
+            "java" => {icon: "\u{e738}", color: "red"}
+            "rb" => {icon: "\u{e739}", color: "red"}
+            "php" => {icon: "\u{e73d}", color: "magenta"}
+            "lua" => {icon: "\u{e620}", color: "blue"}
+            "vim" => {icon: "\u{e62b}", color: "green"}
+            "sh" | "bash" | "zsh" => {icon: "\u{e795}", color: "green"}
+            "fish" => {icon: "\u{f739}", color: "green"}
+            "nu" => {icon: "\u{f489}", color: "green"}
+            "json" => {icon: "\u{e60b}", color: "yellow"}
+            "yaml" | "yml" => {icon: "\u{e6a8}", color: "magenta"}
+            "toml" => {icon: "\u{e6b2}", color: "white"}
+            "conf" | "config" | "cfg" => {icon: "\u{e615}", color: "white"}
+            "md" => {icon: "\u{e73e}", color: "white"}
+            "txt" => {icon: "\u{f0f6}", color: "white"}
+            "pdf" => {icon: "\u{f1c1}", color: "red"}
+            "doc" | "docx" => {icon: "\u{f1c2}", color: "blue"}
+            "xls" | "xlsx" => {icon: "\u{f1c3}", color: "green"}
+            "ppt" | "pptx" => {icon: "\u{f1c4}", color: "red"}
+            "png" | "jpg" | "jpeg" | "gif" | "svg" | "webp" | "ico" => {icon: "\u{f1c5}", color: "magenta"}
+            "mp3" | "wav" | "flac" | "ogg" => {icon: "\u{f001}", color: "cyan"}
+            "mp4" | "mkv" | "avi" | "mov" | "webm" => {icon: "\u{f03d}", color: "magenta"}
+            "git" | "gitignore" => {icon: "\u{f1d3}", color: "red"}
+            "docker" | "dockerfile" => {icon: "\u{e7b0}", color: "cyan"}
+            "lock" => {icon: "\u{f023}", color: "yellow"}
+            "log" => {icon: "\u{f18d}", color: "yellow"}
+            "zip" | "tar" | "gz" | "xz" | "bz2" | "7z" | "rar" => {icon: "\u{f1c6}", color: "red"}
+            "exe" | "bin" | "app" => {icon: "\u{f489}", color: "green"}
+            "sql" | "db" | "sqlite" => {icon: "\u{f1c0}", color: "yellow"}
+            _ => {icon: "\u{f15b}", color: "white"}
+        }
+    }
+}
+
+def --wrapped ls-icons [...args] {
+    let cmd = if ($args | is-empty) { "ls" } else { $"ls ($args | str join ' ')" }
+    let result = (nu -c $"($cmd) | to nuon" | from nuon)
+
+    $result | each {|row|
+        let style = (get-file-style $row.type $row.name)
+        {
+            name: $"(ansi $style.color)($style.icon) ($row.name)(ansi reset)"
+            size: $row.size
+            modified: $row.modified
+        }
+    }
+}
+
+# =============================================================================
+# Navigation & Directory Management
+# =============================================================================
+alias ls = ls-icons
+alias lsa = ls-icons -a
+alias .. = cd ..
+alias ... = cd ../..
+alias .... = cd ../../..
+
+def --env zd [...args: string] {
+    if ($args | is-empty) {
+        cd ~
+    } else if ($args | first | path exists) {
+        cd ($args | first)
+    } else {
+        let result = (^zoxide query ...$args | str trim)
+        if ($result | is-not-empty) and ($result | path exists) {
+            cd $result
+        }
+    }
+}
+
+# =============================================================================
+# File Management & Listing
+# =============================================================================
+if (which eza | is-not-empty) {
+    alias lt = ^eza --tree --level=2 --long --icons --git
+    alias lta = ^eza --tree --level=2 --long --icons --git -a
+} else {
+    alias lt = ls
+    alias lta = ls -a
+}
+
+if (which fzf | is-not-empty) and (which bat | is-not-empty) {
+    def ff [] {
+        ^fzf --preview 'bat --style=numbers --color=always {}'
+    }
+}
+
+def open [...args: string] {
+    ^xdg-open ...$args out+err>| ignore
+}
+
+# =============================================================================
+# Development Tools & Aliases
+# =============================================================================
+alias d = docker
+alias r = rails
+alias cls = clear
+alias g = git
+alias vim = nvim
+alias hx = helix
+alias ts = tmux-sessionizer
+alias oc = opencode
+alias gyr = ~/gglow.sh
+alias copilot = copilot --banner
+
+def avante [] {
+    ^nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"
+}
+
+def n [...args: string] {
+    if ($args | is-empty) { 
+        ^nvim . 
+    } else { 
+        ^nvim ...$args 
+    }
+}
+
+alias gcm = git commit -m
+alias gcam = git commit -a -m
+alias gcad = git commit -a --amend
+
+# =============================================================================
+# Archive Management
+# =============================================================================
+def compress [path: string] {
+    let clean_path = ($path | str trim --right --char '/')
+    if ($clean_path | path exists) and ($clean_path | path type) == dir {
+        ^tar -czf $"($clean_path).tar.gz" $clean_path
+        $"Compressed: ($clean_path).tar.gz"
+    } else {
+        $"Error: Directory '$path' not found"
+    }
+}
+
+alias decompress = tar -xzf
+
+# =============================================================================
+# Storage Device Utilities
+# =============================================================================
+def iso2sd [input?: string, output?: string] {
+    if ($input == null) or ($output == null) {
+        print "Usage: iso2sd <input_file> <output_device>"
+        print "Available SD cards:"
+        ^lsblk -d -o NAME | lines | skip 1 | where {|x| $x =~ '^sd[a-z]'} | each {|x| $"/dev/($x)"}
+        return
+    }
+    
+    if not ($input | path exists) {
+        $"Error: Input file '$input' not found"
+        return
+    }
+    
+    $"Writing ($input) to ($output)..."
+    ^sudo dd bs=4M status=progress oflag=sync if=$input of=$output
+    ^sudo eject $output
+}
+
+def format-drive [device?: string, name?: string] {
+    if ($device == null) or ($name == null) {
+        print "Usage: format-drive <device> <name>"
+        print "Available drives:"
+        ^lsblk -d -o NAME -n | lines | each {|x| $"/dev/($x | str trim)"}
+        return
+    }
+    
+    $"WARNING: This will completely erase all data on ($device) and label it '($name)'."
+    let confirm = (input "Continue? (y/N): ")
+    
+    if ($confirm | str downcase) =~ '^y' {
+        ^sudo wipefs -a $device
+        ^sudo dd if=/dev/zero of=$device bs=1M count=100 status=progress
+        ^sudo parted -s $device mklabel gpt
+        ^sudo parted -s $device mkpart primary ext4 1MiB 100%
+        
+        let partition = if ($device | str contains "nvme") {
+            $"($device)p1"
+        } else {
+            $"($device)1"
+        }
+        
+        ^sudo mkfs.ext4 -L $name $partition
+        ^sudo chmod -R 777 $"/run/media/($env.USER)/($name)"
+        $"Drive ($device) formatted and labeled '($name)'."
+    }
+}
+
+# =============================================================================
+# Media Conversion Utilities
+# =============================================================================
+def transcode-video-1080p [input: string] {
+    let output = $"(($input | path parse).stem)-1080p.mp4"
+    if ($input | path exists) {
+        ^ffmpeg -i $input -vf scale=1920:1080 -c:v libx264 -preset fast -crf 23 -c:a copy $output
+    } else {
+        $"Error: Input file '$input' not found"
+    }
+}
+
+def transcode-video-4k [input: string] {
+    let output = $"(($input | path parse).stem)-optimized.mp4"
+    if ($input | path exists) {
+        ^ffmpeg -i $input -c:v libx265 -preset slow -crf 24 -c:a aac -b:a 192k $output
+    } else {
+        $"Error: Input file '$input' not found"
+    }
+}
+
+def img2jpg [input: string] {
+    let output = $"(($input | path parse).stem).jpg"
+    if ($input | path exists) {
+        ^magick $input -quality 95 -strip $output
+        $"Converted: $output"
+    } else {
+        $"Error: Input file '$input' not found"
+    }
+}
+
+def img2jpg-small [input: string] {
+    let output = $"(($input | path parse).stem).jpg"
+    if ($input | path exists) {
+        ^magick $input -resize "1080x>" -quality 95 -strip $output
+        $"Converted: $output"
+    } else {
+        $"Error: Input file '$input' not found"
+    }
+}
+
+def img2png [input: string] {
+    let output = $"(($input | path parse).stem).png"
+    if ($input | path exists) {
+        ^magick $input -strip -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all $output
+        $"Converted: $output"
+    } else {
+        $"Error: Input file '$input' not found"
+    }
+}

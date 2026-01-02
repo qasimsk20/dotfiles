@@ -1,0 +1,25 @@
+sw_volume: 100
+audio_device_state:1:Pipewire mpd
+state: pause
+current: 4
+time: 118.849
+random: 0
+repeat: 1
+single: 0
+consume: 0
+crossfade: 0
+mixrampdb: 0
+mixrampdelay: -1
+lastloadedplaylist: 
+playlist_begin
+0:Atif Aslam - Hits Of Atif Aslam (2020)/01. Atif Aslam - O Saathi (From "Baaghi 2").flac
+1:Atif Aslam - Hits Of Atif Aslam (2020)/02. Atif Aslam - Dekhte Dekhte (From "Batti Gul Meter Chalu").flac
+2:Atif Aslam - Hits Of Atif Aslam (2020)/03. Palash Muchhal - Musafir From "Sweetiee Weds Nri".flac
+3:Atif Aslam - Hits Of Atif Aslam (2020)/04. Atif Aslam - Tera Hua (Unplugged) [From "Loveyatri - A Journey Of Love"].flac
+4:Atif Aslam - Hits Of Atif Aslam (2020)/05. Atif Aslam - Pehli Dafa (From "Pehli Dafa").flac
+5:Atif Aslam - Hits Of Atif Aslam (2020)/06. Atif Aslam - Baarishein (From "Baarishein").flac
+6:Atif Aslam - Hits Of Atif Aslam (2020)/07. Atif Aslam - Paniyon Sa (From "Satyameva Jayate").flac
+7:Atif Aslam - Hits Of Atif Aslam (2020)/08. Atif Aslam - Hoor (From "Hindi Medium").flac
+8:Atif Aslam - Hits Of Atif Aslam (2020)/09. Atif Aslam - Zindagi Aa Raha Hoon Main (From "Zindagi Aa Raha Hoon Main").flac
+9:Atif Aslam - Hits Of Atif Aslam (2020)/10. Atif Aslam - Tu Chahiye (From "Bajrangi Bhaijaan").flac
+playlist_end

@@ -1,0 +1,88 @@
+/* Ghostty GTK CSS overrides (loaded after theme CSS).
+   Keep this file theme-agnostic; use theme CSS for colors.
+ */
+
+/* Keep tabs sharp and hide per-tab close button */
+headerbar {
+  min-height: 0px;
+  padding: 0; margin: 0; border: none; border-radius: 0px; background-image: none; box-shadow: none;
+}
+
+tabbar {
+  border-radius: 0px;
+  background-image: none;
+  box-shadow: none;
+}
+
+tabbar tabbox {
+  justify-content: center;
+}
+
+/* Libadwaita draws on these too */
+tabbar tabboxchild {
+  border-radius: 0px;
+  background-image: none;
+  box-shadow: none;
+}
+
+tabbar tabboxchild tab button {
+  border-radius: 0px;
+  background-image: none;
+  box-shadow: none;
+}
+
+tabbar tabboxchild tab {
+  margin: 0;
+
+  /* square corners */
+  border-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  background-image: none;
+  box-shadow: none;
+}
+
+/* Tab title font size (libadwaita tabs) */
+tabbar tabboxchild tab widget.tab-title,
+tabbar tabboxchild tab widget.tab-title * {
+  font-size: 18px;
+}
+
+tabbar tabboxchild tab:checked,
+tabbar tabboxchild tab:selected {
+  border-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  background-image: none;
+  box-shadow: none;
+}
+
+tabbar tabboxchild tab:hover {
+  border-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+/* Remove the X button */
+tabbar tabboxchild tab button.tab-close-button {
+  min-width: 0px;
+  min-height: 0px;
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+  background: none;
+  box-shadow: none;
+}
+
+tabbar tabboxchild tab button.tab-close-button image {
+  opacity: 0;
+  -gtk-icon-size: 0px;
+}

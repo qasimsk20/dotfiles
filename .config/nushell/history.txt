@@ -1,0 +1,34 @@
+z nushell
+ls
+cd ~/.config
+z nushell
+cd nushell/
+ls
+oc
+source ~/.config/nushell/config.nu
+nvim ~/.config/nushell/
+cd ~/.config/rmpc/
+ls
+cd ..
+cd mpd/
+ls
+z music/
+cd music/
+ls
+ln -s `~/Downloads/Made in Indie/` ~/.config/mpd/music/
+ls
+mpd update
+ls
+oc
+sourcesource ~/.config/nushell/config.nu
+ls
+las
+ls
+z nushell
+cd ~/.config/nushell/
+ls
+vim config.nu
+nvim config.nu
+z nushell
+cd ~/.config/nushell/
+nvim config.nu
